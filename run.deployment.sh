@@ -8,7 +8,7 @@ podman rm gothic-site 2>/dev/null || true
 
 echo "🔨 Building Podman image..."
 podman build -t test-nginx:v2 .
-
+podman save test-nginx:v2 | minikube image load -
 #echo "🚀 Starting Nginx server..."
 #podman run -d --name gothic-site -p 8082:80 test-nginx:v1
 
