@@ -18,6 +18,7 @@ spec:
       - name: nginx-container
         # Use an unprivileged image so it remains compliant with tight security policies
         image: local/test-nginx:v1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         resources:
