@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+  labels:
+    app: second-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+  template:
+    metadata:
+      labels:
+        app: second-app
+    spec:
+      containers:
+      - name: nginx-container
+        # Use an unprivileged image so it remains compliant with tight security policies
+        image: nginxinc/nginx-unprivileged:alpine
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: second-app-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8080        # The port inside the cluster
+    targetPort: 8080  # The port your container is listening on
+    nodePort: 30081   # The external port you will use to visit the app
+  selector:
+    app: second-app
